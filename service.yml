@@ -1,7 +1,7 @@
 name: pi-manager
-tags: ["fastapi"]
+tags: ["manager"]
 lifecycle: sleep
 dev: []
-active: true
+active: false
 Dependencies: []
 env: []
