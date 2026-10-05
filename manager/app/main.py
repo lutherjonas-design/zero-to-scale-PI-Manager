@@ -1,15 +1,31 @@
 from fastapi import FastAPI
+import socket, os, threading, time
 
-from .config import settings
+SOCKET_PATH = "/tmp/my_app.sock"
 
-app = FastAPI(title=settings.app_name)
+app = FastAPI()
 
+def handle_connection(conn):
+    try:
+        data = conn.recv(1024).decode().strip()
+        if not data:
+            return
+        response = f"{data} | {time.time()}"
+        conn.sendall(response.encode())
+    finally:
+        conn.close()
 
-@app.get("/")
-def root():
-    return {"service": settings.app_name, "status": "ok"}
+def socket_listener():
+    if os.path.exists(SOCKET_PATH):
+        os.remove(SOCKET_PATH)
+    server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    server.bind(SOCKET_PATH)
+    server.listen(5)
+    os.chmod(SOCKET_PATH, 0o777)
+    while True:
+        conn, _ = server.accept()
+        threading.Thread(target=handle_connection, args=(conn,), daemon=True).start()
 
-
-@app.get("/health")
-def health():
-    return {"status": "healthy"}
+@app.on_event("startup")
+def start_listener():
+    threading.Thread(target=socket_listener, daemon=True).start()
