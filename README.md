@@ -3,7 +3,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 To run:
+Server:
+source .venv/bin/activate
 uvicorn main:app --reload
+cli:
 python client.py "hello"
 
 I need to create a programm, to manage my build process for my PI. I don't know if I should invest the time in it now or later. The funtionality that is planned:
