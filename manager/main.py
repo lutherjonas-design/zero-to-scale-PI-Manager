@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 from fastapi import FastAPI
 import socket, os, threading, time
+from pathlib import Path
 
-SOCKET_PATH = "/tmp/my_app.sock"
+SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath(".env").read_text().strip()
 
 app = FastAPI()
 
