@@ -3,7 +3,7 @@ from fastapi import FastAPI
 import socket, os, threading, time
 from pathlib import Path
 
-SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath(".env").read_text().strip()
+SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath("path.env").read_text().strip()
 
 app = FastAPI()
 

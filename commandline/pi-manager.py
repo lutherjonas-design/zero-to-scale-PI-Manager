@@ -2,7 +2,7 @@
 import socket, sys
 from pathlib import Path
 
-SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath(".env").read_text().strip()
+SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath("path.env").read_text().strip()
 
 msg = sys.argv[1] if len(sys.argv) > 1 else "ping"
 
