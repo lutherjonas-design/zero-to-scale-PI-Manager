@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import socket, sys
 
 SOCKET_PATH = "/tmp/my_app.sock"

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from fastapi import FastAPI
 import socket, os, threading, time
 
