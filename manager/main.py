@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-from fastapi import FastAPI
+from fastapi import FastAPI #pyright: ignore[reportMissingImports]
 import socket, os, threading, time
-from pathlib import Path
-
-SOCKET_PATH = Path(__file__).resolve().parent.parent.joinpath("path.env").read_text().strip()
+from .socket import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
 
 app = FastAPI()
 
 def handle_connection(conn):
     try:
-        data = conn.recv(1024).decode().strip()
+        data = read_message(conn)
         if not data:
             return
         response = f"{data} | {time.time()}"
-        conn.sendall(response.encode())
+        write_message(conn,response)
     finally:
         conn.close()
 
