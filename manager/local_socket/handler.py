@@ -2,6 +2,7 @@ import socket, os, threading, time, logging
 from .socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
 
 logger = logging.getLogger("socket")
+
 def handle_connection(conn):
     data = None
     try:
