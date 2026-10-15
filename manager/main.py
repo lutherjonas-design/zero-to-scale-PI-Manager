@@ -5,8 +5,6 @@ from .local_socket import socket_listener #pyright: ignore
 
 app = FastAPI()
 
-
-
 @app.on_event("startup")
 def start_listener():
     # Seperated way to run the commandline side of the project.
