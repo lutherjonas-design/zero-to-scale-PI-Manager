@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from fastapi import FastAPI #pyright: ignore[reportMissingImports]
 import socket, os, threading, time
-from manager.socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
+from socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
 
 app = FastAPI()
 

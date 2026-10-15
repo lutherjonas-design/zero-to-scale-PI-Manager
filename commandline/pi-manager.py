@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import socket, sys
-from manager.socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
+from socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
 
 RED = "\033[31m"
 GREEN = "\033[32m"
