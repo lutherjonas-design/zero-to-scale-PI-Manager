@@ -6,13 +6,16 @@ from socket_communication import SOCKET_PATH, write_message, read_message #pyrig
 app = FastAPI()
 
 def handle_connection(conn):
+    data = None
     try:
         data = read_message(conn)
         if not data:
             return
-        response = f"{data} | {time.time()}"
+        response = data if data else {"time": time.time()}
         write_message(conn,response)
     finally:
+        command = data["command"] if data else None
+        print(f"Socket request: {command if command else "None"}")
         conn.close()
 
 def socket_listener():
