@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 from fastapi import FastAPI #pyright: ignore[reportMissingImports]
-import socket, os, threading, time
+import socket, os, threading, time, logging
 from socket_communication import SOCKET_PATH, write_message, read_message #pyright: ignore[reportMissingImports]
 
 app = FastAPI()
 
+logger = logging.getLogger("socket")
 def handle_connection(conn):
     data = None
     try:
         data = read_message(conn)
         if not data:
+            logger.warning("Socket request: empty message")
             return
+       
         response = data if data else {"time": time.time()}
         write_message(conn,response)
+        logger.info("Socket response sent for: %s", data.get("command","None"))
+
     finally:
         command = data["command"] if data else None
         print(f"Socket request: {command if command else "None"}")
