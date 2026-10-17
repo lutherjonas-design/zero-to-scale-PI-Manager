@@ -54,6 +54,18 @@ def command_parse():
     # status
     health_status = health_action.add_parser("status", help="gives the status of the PI-Manager")
 
+    return parser
+
+def build_payload(args) -> dict:
+    PATH_ALIASES = {"s": "service", "serv": "service", "h": "health"}
+    
+    path = PATH_ALIASES.get(args.path, args.path)
+    payload = {"command": path, "action": args.action}
+    target = getattr(args, "target", None)
+    if target:
+        payload["target"] = target
+    return payload
+
 def socket_transaction(payload):
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
         client.connect(SOCKET_PATH)
@@ -65,15 +77,28 @@ def socket_transaction(payload):
 def message_renderer(response_dict):
     print(f"Recieved: {response_dict}")
 
-def main():
-    response_dict = None
-    msg_string = sys.argv[1] if len(sys.argv) > 1 else "ping"
-    
-    payload = {"command": msg_string}
-    try:
-        response_dict = socket_transaction(payload)
-    except (ConnectionRefusedError, FileNotFoundError) as e:
-        print(f"{RED}ERROR: {e}{RESET}")
-    message_renderer(response_dict)
+def main(argv=None) -> int:
+    parser = command_parse()
+    args = parser.parse_args(argv)
 
-command_parse()
+    if args.path is None:
+        args.path, args.action = "health", "status"
+    elif args.action is None:
+        args.action = "status"
+
+    payload = build_payload(args)
+
+    try:
+        response = socket_transaction(payload)
+    except (ConnectionRefusedError, FileNotFoundError):
+        print(f"{RED}ERROR: daemon not reachable{RESET}", file=sys.stderr)
+        return 3
+    except socket.timeout:
+        print(f"{RED}ERROR: daemon did not respond{RESET}", file=sys.stderr)
+        return 4
+    except (OSError, ValueError) as e:
+        print(f"{RED}ERROR: protocol failure: {e}{RESET}", file=sys.stderr)
+        return 5
+
+    message_renderer(response)
+    return 0 if response.get("ok") else 1
