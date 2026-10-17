@@ -102,3 +102,6 @@ def main(argv=None) -> int:
 
     message_renderer(response)
     return 0 if response.get("ok") else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
