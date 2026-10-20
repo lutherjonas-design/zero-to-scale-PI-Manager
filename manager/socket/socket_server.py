@@ -24,11 +24,11 @@ class UnixSocketServer(SocketServerInterface):
             
             response = data if data else {"time": time.time()}
             write_message(conn, response)
-            logger.info("Socket response sent for: %s", data.get("command", "None"))
+            logger.info("Socket response sent for: %s", data.get("selector", "None"))
 
         finally:
-            command = data["command"] if data else None
-            print(f"Socket request: {command if command else 'None'}")
+            selector = data["selector"] if data else None
+            print(f"Socket request: {selector if selector else 'None'}")
             conn.close()
 
     def _listen_loop(self):
