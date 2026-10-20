@@ -60,10 +60,20 @@ def build_payload(args) -> dict:
     PATH_ALIASES = {"s": "service", "serv": "service", "h": "health"}
     
     path = PATH_ALIASES.get(args.path, args.path)
-    payload = {"command": path, "action": args.action}
+    payload = {"selector": path, "action": args.action}
+
     target = getattr(args, "target", None)
     if target:
         payload["target"] = target
+
+    filter_opt = getattr(args, "filter", None)
+    if filter_opt:
+        payload["filter"] = filter_opt
+
+    timer = getattr(args, "timer", None)
+    if timer:
+        payload["timer"] = timer
+
     return payload
 
 def socket_transaction(payload):

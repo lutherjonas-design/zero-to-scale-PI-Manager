@@ -15,5 +15,4 @@ I need to create a programm, to manage my build process for my PI. I don't know 
 3. create a copy, because this is a bare repo in a dev_storage/apps and move the secrets into there.
 4. handle collisions and fast pushes, i.e. queue and if we have a later push, we build for that and can ignore the one before.
 
-for the argparse part
-https://docs.python.org/3/howto/argparse.html
+Right now validator and Functions

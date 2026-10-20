@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
+from contextlib import asynccontextmanager
 from fastapi import FastAPI #pyright: ignore[reportMissingImports]
-import threading
-from .local_socket import socket_listener #pyright: ignore
+import logging
+from manager.socket.socket_server import UnixSocketServer
 
-app = FastAPI()
+logging.basicConfig(level=logging.INFO)
+logger_lifespan = logging.getLogger(__name__)
 
-@app.on_event("startup")
-def start_listener():
-    # Seperated way to run the commandline side of the project.
-    threading.Thread(target=socket_listener, daemon=True).start()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    socket_handler = UnixSocketServer()
+    logger_lifespan.info("Starte Socket-Listener...")
+    socket_handler.start()
+    logger_lifespan.info("Start-Up erfolgreich abgeschlossen")
+    yield
+    logger_lifespan.info("Shutdown gestartet...")
+    socket_handler.stop()
+    logger_lifespan.info("Shutdown erfolgreich beendet")
+
+    
+
+app = FastAPI(lifespan=lifespan)

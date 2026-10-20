@@ -25,8 +25,10 @@ def receive_exact_bytes(sock, target_amount):
     return accumulated_data
 
 # --- RECEIVE LOGIC ---
-def read_message(sock, MAX_PAYLOAD=1<<20):
+def read_message(sock, MAX_PAYLOAD=1<<20, timeout=5):
     # Step A: Get the 4-byte header using our extraction loop
+    if timeout > 0:
+        sock.settimeout(timeout)
     header_bytes = receive_exact_bytes(sock, 4)
     
     # Step B: Unpack the tuple and grab the first element [0]
