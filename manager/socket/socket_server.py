@@ -65,6 +65,8 @@ class UnixSocketServer(SocketServerInterface):
     def start(self):
         logger.info("Starting UNIX socket listener thread")
         self._stop_event.clear()
+        # starts a loop, that's waiting for connections, these connections will not be hold
+        # long and returned promptly, by design
         self._server_thread = threading.Thread(target=self._listen_loop, daemon=True)
         self._server_thread.start()
 
