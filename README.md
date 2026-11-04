@@ -1,7 +1,7 @@
 # zero-to-scale-PI-Manager
 
 ### ⚠️ **Context & Status**
-A lightweight, self-hosted automation server and orchestration manager built specifically for isolated Raspberry Pi environments. The system acts as a central control plane for local bare Git repositories, automated backups, and dynamic, dependency-aware Docker container scaling (including on-demand container sleep and wake cycles).
+A lightweight, self-hosted automation server and orchestration manager built specifically for isolated Raspberry Pi environments. The system acts as a central control plane for local bare Git repositories, automated backups, and dynamic, dependency-aware Docker container scaling (including on-demand container sleep and wake cycles). Currently residing on my PI regularly pushed to this repo.
 
 ---
 
