@@ -5,19 +5,19 @@ import logging
 from manager.socket.socket_server import UnixSocketServer
 
 logging.basicConfig(level=logging.INFO)
-logger_lifespan = logging.getLogger(__name__)
+logger_lifespan = logging.getLogger("lifespan")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     socket_handler = UnixSocketServer()
-    logger_lifespan.info("Starte Socket-Listener...")
     socket_handler.start()
-    logger_lifespan.info("Start-Up erfolgreich abgeschlossen")
-    yield
-    logger_lifespan.info("Shutdown gestartet...")
-    socket_handler.stop()
-    logger_lifespan.info("Shutdown erfolgreich beendet")
+    logger_lifespan.info("Startet Socket-Listener")
+    logger_lifespan.info("Start-Up done")
 
-    
+    yield
+
+    logger_lifespan.info("Shutdown startet...")
+    socket_handler.stop()
+    logger_lifespan.info("Shutdown done")
 
 app = FastAPI(lifespan=lifespan)

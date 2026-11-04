@@ -9,6 +9,8 @@ uvicorn manager.main:app --reload
 cli:
 python client.py "hello"
 
+For this to run, the content of the shared folder needs to be placed into manager and commandline
+
 I need to create a programm, to manage my build process for my PI. I don't know if I should invest the time in it now or later. The funtionality that is planned:
 1. run as a background task and check for changes in the depositories in a folder (/mnt/dev_storage/repos/)
 2. if change, look at the service.yml file, if it exists go on with the process decided for that (which dev tags and if it should sleep and what is it)

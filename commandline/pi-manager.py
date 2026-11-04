@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import socket, sys, argparse
+# the following depends on the shared folder and needs to be
+# coppied into manager and commandline. 
 from socket_communication import SOCKET_PATH, write_message, read_message
 
 RED, GREEN, YELLOW, RESET = "\033[31m", "\033[32m", "\033[33m", "\033[0m"

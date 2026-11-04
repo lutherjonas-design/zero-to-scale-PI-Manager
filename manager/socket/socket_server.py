@@ -1,5 +1,7 @@
 import socket, os, threading, time, logging
 from manager.interfaces import SocketServerInterface
+# the following depends on the shared folder and needs to be
+# coppied into manager and commandline. 
 from manager.socket_communication import SOCKET_PATH, write_message, read_message # pyright: ignore[reportMissingImports]
 
 logger = logging.getLogger(__name__)
