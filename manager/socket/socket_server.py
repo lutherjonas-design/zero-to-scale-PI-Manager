@@ -1,4 +1,6 @@
 import socket, os, threading, time, logging
+from pydantic import ValidationError
+
 from manager.interfaces import SocketServerInterface
 # the following depends on the shared folder and needs to be
 # coppied into manager and commandline. 
@@ -7,11 +9,12 @@ from manager.socket_communication import SOCKET_PATH, write_message, read_messag
 logger = logging.getLogger(__name__)
 
 class UnixSocketServer(SocketServerInterface):
-    def __init__(self):
+    def __init__(self,command_handler):
         # Hier speichern wir die Abhängigkeit. Jede Verbindung kann nun darauf zugreifen!
         self._stop_event = threading.Event()
         self._server_thread = None
         self._server_socket = None
+        self.command_handler = command_handler
 
     def _handle_connection(self, conn):
         data = None
@@ -20,11 +23,10 @@ class UnixSocketServer(SocketServerInterface):
             if not data:
                 logger.warning("Socket request: empty message")
                 return
-           
-            # HIER KOMMT SPÄTER DEIN DICTIONARY-ROUTER HIN!
-            # Er nutzt self._container_mgr, um Befehle auszuführen.
             
-            response = data if data else {"time": time.time()}
+            response = self.command_handler.execute(data["selector"],data["action"],data.get("payload",None))
+            
+
             write_message(conn, response)
             logger.info("Socket response sent for: %s", data.get("selector", "None"))
 
