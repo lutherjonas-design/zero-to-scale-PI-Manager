@@ -2,7 +2,7 @@
 import pytest
 # Passe die Imports an deine genaue Ordnerstruktur an
 from manager.interfaces import ServiceStatusSchema, ServiceListProjectSchema
-from manager.services.service import StaticProjectService  # Angenommen, es liegt in services.py
+from manager.service.service import StaticProjectService  # Angenommen, es liegt in services.py
 
 @pytest.fixture
 def static_service():
