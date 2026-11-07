@@ -23,9 +23,18 @@ class UnixSocketServer(SocketServerInterface):
             if not data:
                 logger.warning("Socket request: empty message")
                 return
+            try:
+                response = self.command_handler.execute(data["selector"],data["action"],data.get("payload",None))
             
-            response = self.command_handler.execute(data["selector"],data["action"],data.get("payload",None))
-            
+            except KeyError as e:
+                logger.warning(f"Command not found: {data['selector']} {data['action']}")
+                response = {"error": "not_found", "message": str(e)}
+
+            except ValidationError as e:
+                # Passiert, wenn die Payload da ist, aber nicht zum Pydantic-Schema passt
+                logger.warning(f"validation error for: {data['selector']} {data['action']}:")
+                logger.warning(e.json(indent=2))  # Zeigt dir exakt, welches Feld fehlt oder falsch ist
+                response = {"error": "bad_request", "details": e.errors()}
 
             write_message(conn, response)
             logger.info("Socket response sent for: %s", data.get("selector", "None"))
