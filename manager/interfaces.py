@@ -34,3 +34,9 @@ class ServiceActionInterface(ABC):
     def list_projects(self, data:ServiceListProjectSchema) -> dict:
         """give a list of all projects"""
         pass
+
+# ---------- Docker ----------
+
+# ---------- Project ----------
+
+# ---------- Health ----------

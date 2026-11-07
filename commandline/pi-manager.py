@@ -60,23 +60,17 @@ def command_parse():
 
 def build_payload(args) -> dict:
     PATH_ALIASES = {"s": "service", "serv": "service", "h": "health"}
-    
+
     path = PATH_ALIASES.get(args.path, args.path)
-    payload = {"selector": path, "action": args.action}
+    cargo = {"selector": path, "action": args.action}
 
-    target = getattr(args, "target", None)
-    if target:
-        payload["target"] = target
+    ROUTING_KEYS = ["path","action"] # sort out the routing/selecting Part of the command.
+    cargo["payload"] = {
+        k: v for k, v in vars(args).items() 
+        if k not in ROUTING_KEYS and v
+    }
 
-    filter_opt = getattr(args, "filter", None)
-    if filter_opt:
-        payload["filter"] = filter_opt
-
-    timer = getattr(args, "timer", None)
-    if timer:
-        payload["timer"] = timer
-
-    return payload
+    return cargo
 
 def socket_transaction(payload):
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
