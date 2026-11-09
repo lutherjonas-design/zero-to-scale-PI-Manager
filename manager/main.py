@@ -4,16 +4,25 @@ from fastapi import FastAPI #pyright: ignore[reportMissingImports]
 import logging
 from manager.socket.socket_server import UnixSocketServer
 from manager.registry.command_registry import CommandRegistry
+from manager.service.service import StaticProjectService
 
 logging.basicConfig(level=logging.INFO)
 logger_lifespan = logging.getLogger("lifespan")
 
+def socket_registry():
+    socket_registry = CommandRegistry()
+    #socket_registry.add("","",)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     socket_registry = CommandRegistry()
-    socket_handler = UnixSocketServer(command_handler=CommandRegistry)
+    https_registry = CommandRegistry()
+    socket_handler = UnixSocketServer(command_handler=socket_registry)
+    
+    # If possible this should be last, since it will work without needing the yield point.
     socket_handler.start()
     logger_lifespan.info("Startet Socket-Listener")
+
     logger_lifespan.info("Start-Up done")
 
     yield

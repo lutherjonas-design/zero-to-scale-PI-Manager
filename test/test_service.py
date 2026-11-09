@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import pytest
-# Passe die Imports an deine genaue Ordnerstruktur an
+import pytest #pyright: ignore[reportMissingImports]
+
 from manager.interfaces import ServiceStatusSchema, ServiceListProjectSchema
 from manager.service.service import StaticProjectService  # Angenommen, es liegt in services.py
 
