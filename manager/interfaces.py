@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from abc import ABC, abstractmethod
-from pydantic import BaseModel
+from pydantic import BaseModel # pyright: ignore[reportMissingImports]
 
+from manager.discovery.decorator import discovery_selector_namespace, discovery_method_tags
 # ---------- Socket ----------
 class SocketServerInterface(ABC):
     @abstractmethod
@@ -23,13 +24,15 @@ class ServiceStatusSchema(ServiceBaseSchema):
 
 class ServiceListProjectSchema(ServiceBaseSchema):
     filter: str | None = None
-    
+
+@discovery_selector_namespace("service")
 class ServiceActionInterface(ABC):
+    @discovery_method_tags("status",["sytem","public"])
     @abstractmethod
     def get_status(self, payload:ServiceStatusSchema) -> dict:
         """Give back the state of a project."""
         pass
-
+    @discovery_method_tags("status",["sytem","public"])
     @abstractmethod
     def list_projects(self, payload:ServiceListProjectSchema) -> dict:
         """give a list of all projects"""
