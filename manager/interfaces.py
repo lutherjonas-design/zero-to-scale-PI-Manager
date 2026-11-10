@@ -26,12 +26,12 @@ class ServiceListProjectSchema(ServiceBaseSchema):
     
 class ServiceActionInterface(ABC):
     @abstractmethod
-    def get_status(self, data:ServiceStatusSchema) -> dict:
+    def get_status(self, payload:ServiceStatusSchema) -> dict:
         """Give back the state of a project."""
         pass
 
     @abstractmethod
-    def list_projects(self, data:ServiceListProjectSchema) -> dict:
+    def list_projects(self, payload:ServiceListProjectSchema) -> dict:
         """give a list of all projects"""
         pass
 
