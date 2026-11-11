@@ -5,12 +5,12 @@ def discovery_selector_namespace(selector_name: str):
         return clas
     return decorator
 
-def discovery_method_tags(action: str, tags: list[str]):
+def discovery_method_tags(action: str, zones: list[str]):
     def decorator(func):
         # Wir speichern alle Infos in einem kleinen Dict auf der Funktion
         func._discovery_data = {
             "action": action,
-            "registries": tags
+            "registries": zones
         }
         return func
     return decorator

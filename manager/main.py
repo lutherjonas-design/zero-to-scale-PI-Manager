@@ -2,22 +2,27 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI #pyright: ignore[reportMissingImports]
 import logging
+
+import manager.interfaces as CommandInterfaces
+
 from manager.socket.socket_server import UnixSocketServer
 from manager.registry.command_registry import CommandRegistry
 from manager.service.service import StaticProjectService
+from manager.discovery.engine import DiscoverEngine
 
 logging.basicConfig(level=logging.INFO)
 logger_lifespan = logging.getLogger("lifespan")
 
-def socket_registry():
-    socket_registry = CommandRegistry()
-    #socket_registry.add("","",)
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    socket_registry = CommandRegistry()
-    https_registry = CommandRegistry()
-    socket_handler = UnixSocketServer(command_handler=socket_registry)
+    service_handler = StaticProjectService()
+
+    public_command_registry,system_command_registry = CommandRegistry(), CommandRegistry()
+    auto_discovery = DiscoverEngine({"public":public_command_registry,"system":system_command_registry})
+    auto_discovery.fill_command_registry(CommandInterfaces, [service_handler])
+    logger_lifespan.info(system_command_registry)
+
+    socket_handler = UnixSocketServer(command_handler = system_command_registry)
     
     # If possible this should be last, since it will work without needing the yield point.
     socket_handler.start()
