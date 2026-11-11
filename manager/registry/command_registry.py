@@ -6,7 +6,6 @@ class CommandRegistry:
     def list_commands(self):
         return [command.__name__ for command, _ in self.registry.values()]
 
-
     def add(self,keyPath:str,keyAction:str,function, schema=None):
         if not (keyPath and keyAction and function):
             raise KeyError("Path, Action und Funktion müssen angegeben werden.")

@@ -59,6 +59,8 @@ class DiscoverEngine():
     def fill_command_registry(self,interface_file,instances):
         method_list = self._discover_commands(interface_file=interface_file)
 
+        print(len(method_list))
+        
         for command in method_list:
             actual_function = None
             
