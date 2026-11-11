@@ -27,12 +27,12 @@ class ServiceListProjectSchema(ServiceBaseSchema):
 
 @discovery_selector_namespace("service")
 class ServiceActionInterface(ABC):
-    @discovery_method_tags("status",["sytem","public"])
+    @discovery_method_tags("status",["system","public"])
     @abstractmethod
     def get_status(self, payload:ServiceStatusSchema) -> dict:
         """Give back the state of a project."""
         pass
-    @discovery_method_tags("status",["sytem","public"])
+    @discovery_method_tags("list",["system","public"])
     @abstractmethod
     def list_projects(self, payload:ServiceListProjectSchema) -> dict:
         """give a list of all projects"""

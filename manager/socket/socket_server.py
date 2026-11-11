@@ -1,4 +1,4 @@
-import socket, os, threading, time, logging
+import socket, os, threading, logging
 from pydantic import ValidationError
 
 from manager.interfaces import SocketServerInterface

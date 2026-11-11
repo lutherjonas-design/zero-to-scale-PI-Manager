@@ -28,8 +28,6 @@ async def lifespan(app: FastAPI):
     socket_handler.start()
     logger_lifespan.info("Startet Socket-Listener")
 
-    logger_lifespan.info("Start-Up done")
-
     yield
 
     logger_lifespan.info("Shutdown startet...")

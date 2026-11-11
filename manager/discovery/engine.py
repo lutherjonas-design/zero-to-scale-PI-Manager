@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-import inspect
-import typing
+import inspect, typing
 from abc import ABC
-from dataclasses import dataclass#
+from dataclasses import dataclass
 from pydantic import BaseModel # pyright: ignore[reportMissingImports]
 
 @dataclass
@@ -24,7 +23,6 @@ class DiscoverEngine():
         for name, obj in inspect.getmembers(interface_file, inspect.isclass):
             if issubclass(obj, ABC) and obj is not ABC: # only ABC classes (scip schemas)
                 command_classes.append(obj)
-
         method_list = []
         for command_class in command_classes:
             selector = getattr(command_class, "_selection_namespace", None)
@@ -38,7 +36,7 @@ class DiscoverEngine():
                     continue
 
                 # collect needed Data from the Interface
-                data = getattr(interface_method, "_expose_data", None)
+                data = getattr(interface_method, "_discovery_data", None)
                 if not data:
                     continue
                 type_hints = typing.get_type_hints(interface_method)
@@ -59,11 +57,8 @@ class DiscoverEngine():
     def fill_command_registry(self,interface_file,instances):
         method_list = self._discover_commands(interface_file=interface_file)
 
-        print(len(method_list))
-        
         for command in method_list:
             actual_function = None
-            
             for instance in instances:
                 # 1. Prüfen, ob diese Instanz überhaupt das gesuchte Interface implementiert
                 if not isinstance(instance, command.interface_class):
@@ -73,14 +68,12 @@ class DiscoverEngine():
                 if hasattr(instance, command.method):
                     actual_function = getattr(instance, command.method)
                     break  # Richtige Instanz und Methode gefunden, Loop abbrechen
-                
             if not actual_function:
                 # Laut scheitern, wenn das Interface nicht implementiert wurde!
                 raise AttributeError(
                     f"Fehler im Interface '{command.interface_class.__name__}': "
                     f"Keine Implementierung für die Methode '{command.method}' in den übergebenen Instanzen gefunden!"
                 )
-
             # An die echten Registries verteilen
             for registry_zone in command.registries:
                 if registry_zone in self.registries:
