@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     public_command_registry,system_command_registry = CommandRegistry(), CommandRegistry()
     auto_discovery = DiscoverEngine({"public":public_command_registry,"system":system_command_registry})
     auto_discovery.fill_command_registry(CommandInterfaces, [service_handler])
-    logger_lifespan.info(system_command_registry)
+    logger_lifespan.info(system_command_registry.list_commands())
 
     socket_handler = UnixSocketServer(command_handler = system_command_registry)
     
