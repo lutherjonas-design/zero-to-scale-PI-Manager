@@ -2,12 +2,12 @@
 import pytest #pyright: ignore[reportMissingImports]
 
 from manager.interfaces import ServiceStatusSchema, ServiceListProjectSchema
-from manager.service.service import StaticProjectService  # Angenommen, es liegt in services.py
+from manager.service.service import ProjectService  # Angenommen, es liegt in services.py
 
 @pytest.fixture
 def static_service():
     """Fixture, die das Service-Objekt für die Tests bereitstellt."""
-    return StaticProjectService()
+    return ProjectService('test/mock_file')
 
 def test_get_status_returns_correct_string(static_service):
     # 1. Arrange: Valides Pydantic-Objekt bauen

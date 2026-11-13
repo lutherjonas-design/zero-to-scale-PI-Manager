@@ -1,7 +1,7 @@
 name: pi-manager
-tags: ["manager"]
-lifecycle: sleep
+tags: [manager]
+life_cycle: sleep
 dev: []
 active: false
-Dependencies: []
+dependencies: []
 env: []

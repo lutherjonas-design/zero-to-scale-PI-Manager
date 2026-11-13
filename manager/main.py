@@ -7,7 +7,7 @@ import manager.interfaces as CommandInterfaces
 
 from manager.socket.socket_server import UnixSocketServer
 from manager.registry.command_registry import CommandRegistry
-from manager.service.service import StaticProjectService
+from manager.service.service import ProjectService
 from manager.discovery.engine import DiscoverEngine
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ logger_lifespan = logging.getLogger("lifespan")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    service_handler = StaticProjectService()
+    service_handler = ProjectService()
 
     public_command_registry,system_command_registry = CommandRegistry(), CommandRegistry()
     auto_discovery = DiscoverEngine({"public":public_command_registry,"system":system_command_registry})

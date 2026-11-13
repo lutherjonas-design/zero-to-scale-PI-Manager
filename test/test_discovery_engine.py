@@ -78,7 +78,7 @@ def test_discover_and_fill_registry_success():
     # Wurde der Befehl in der 'public'-Registry registriert?
     assert len(public_registry.added_commands) == 1
     cmd_public = public_registry.added_commands[0]
-    assert cmd_public["keyPath"] == "project.static"
+    assert cmd_public["keyPath"] == "fake"
     assert cmd_public["keyAction"] == "read"
     assert cmd_public["schema"] == FakeSchema
     assert cmd_public["function"] == service_instance.get_status
